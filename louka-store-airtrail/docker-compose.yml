@@ -1,0 +1,27 @@
+version: "3.7"
+
+services:
+  app_proxy:
+    environment:
+      APP_HOST: louka-store-airtrail_web_1
+      APP_PORT: 3000
+
+  web:
+    image: johanohly/airtrail:latest
+    restart: on-failure
+    depends_on:
+      - db
+    volumes:
+      - ${APP_DATA_DIR}/uploads:/app/uploads
+    environment:
+      - ORIGIN=http://umbrel.local:3000
+      - DB_URL=postgres://postgres:motdepassesecret@db:5432/airtrail
+
+  db:
+    image: postgres:16
+    restart: on-failure
+    volumes:
+      - ${APP_DATA_DIR}/db_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=motdepassesecret
+      - POSTGRES_DB=airtrail
