@@ -1,0 +1,18 @@
+manifestVersion: 1
+id: louka-store-trek
+category: files
+name: TREK
+version: "latest"
+tagline: Application TREK
+description: >-
+  Application TREK hébergée sur votre serveur Umbrel.
+developer: liketrek
+website: https://github.com/liketrek/TREK
+dependencies: []
+repo: https://github.com/liketrek/TREK
+support: https://github.com/liketrek/TREK/issues
+port: 8080
+gallery: []
+path: ""
+defaultUsername: ""
+defaultPassword: ""
