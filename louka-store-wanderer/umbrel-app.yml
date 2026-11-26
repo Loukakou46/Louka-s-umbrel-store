@@ -1,0 +1,18 @@
+manifestVersion: 1
+id: louka-store-wanderer
+category: files
+name: Wanderer
+version: "latest"
+tagline: Catalogue de randonnées auto-hébergé
+description: >-
+  Créez, importez et partagez vos tracés GPX et itinéraires de randonnée.
+developer: flomp
+website: https://wanderer.to/
+dependencies: []
+repo: https://github.com/Flomp/wanderer
+support: https://github.com/Flomp/wanderer/issues
+port: 3000
+gallery: []
+path: ""
+defaultUsername: ""
+defaultPassword: ""
