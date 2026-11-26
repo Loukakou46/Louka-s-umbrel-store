@@ -4,3 +4,15 @@ updates:
     directory: "/louka-store-trek"
     schedule:
       interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/louka-store-airtrail"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/louka-store-wanderer"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/louka-store-dawarich"
+    schedule:
+      interval: "daily"
