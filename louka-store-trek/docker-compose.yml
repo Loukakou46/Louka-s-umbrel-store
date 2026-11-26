@@ -1,0 +1,16 @@
+version: "3.7"
+
+services:
+  app_proxy:
+    environment:
+      APP_HOST: louka-store-trek_server_1
+      APP_PORT: 3000
+
+  server:
+    image: mauriceboe/trek:latest
+    restart: on-failure
+    volumes:
+      - ${APP_DATA_DIR}/data:/app/data
+      - ${APP_DATA_DIR}/uploads:/app/uploads
+    environment:
+      - TZ=Europe/Paris
