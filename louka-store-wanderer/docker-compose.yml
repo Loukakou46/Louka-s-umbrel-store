@@ -1,0 +1,45 @@
+version: "3.7"
+
+services:
+  app_proxy:
+    environment:
+      APP_HOST: louka-store-wanderer_web_1
+      APP_PORT: 3000
+
+  search:
+    image: getmeili/meilisearch:v1.36.0
+    restart: on-failure
+    volumes:
+      - ${APP_DATA_DIR}/data.ms:/meili_data/data.ms
+    environment:
+      - MEILI_MASTER_KEY=remplacez_par_une_cle_de_64_caracteres_hex
+      - MEILI_NO_ANALYTICS=true
+
+  db:
+    image: flomp/wanderer-db:latest
+    restart: on-failure
+    depends_on:
+      - search
+    volumes:
+      - ${APP_DATA_DIR}/pb_data:/pb_data
+      - ${APP_DATA_DIR}/plugins:/data/plugins
+    environment:
+      - POCKETBASE_ENCRYPTION_KEY=cle_de_32_caracteres_hexadecimaux
+      - POCKETBASE_PROXY_SECRET=autre_cle_de_64_caracteres_hex
+      - ORIGIN=http://umbrel.local:3000
+
+  web:
+    image: flomp/wanderer-web:latest
+    restart: on-failure
+    depends_on:
+      - search
+      - db
+    volumes:
+      - ${APP_DATA_DIR}/uploads:/app/uploads
+    environment:
+      - ORIGIN=http://umbrel.local:3000
+      - MEILI_URL=http://search:7700
+      - MEILI_MASTER_KEY=remplacez_par_une_cle_de_64_caracteres_hex
+      - POCKETBASE_PROXY_SECRET=autre_cle_de_64_caracteres_hex
+      - PUBLIC_POCKETBASE_URL=http://db:8090
+      - PUBLIC_DISABLE_SIGNUP=false
