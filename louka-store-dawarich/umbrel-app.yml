@@ -1,0 +1,18 @@
+manifestVersion: 1
+id: louka-store-dawarich
+category: files
+name: Dawarich
+version: "latest"
+tagline: Historique de localisation auto-hébergé
+description: >-
+  Visualisez et analysez vos déplacements et trajets quotidiens en toute confidentialité.
+developer: Freika
+website: https://dawarich.app/
+dependencies: []
+repo: https://github.com/Freika/dawarich
+support: https://github.com/Freika/dawarich/issues
+port: 3000
+gallery: []
+path: ""
+defaultUsername: ""
+defaultPassword: ""
