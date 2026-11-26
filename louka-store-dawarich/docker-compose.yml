@@ -1,0 +1,64 @@
+version: "3.7"
+
+services:
+  app_proxy:
+    environment:
+      APP_HOST: louka-store-dawarich_app_1
+      APP_PORT: 3000
+
+  redis:
+    image: redis:7.4-alpine
+    restart: on-failure
+    volumes:
+      - ${APP_DATA_DIR}/redis_data:/data
+
+  db:
+    image: postgis/postgis:17-3.5-alpine
+    restart: on-failure
+    volumes:
+      - ${APP_DATA_DIR}/db_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=motdepassedawarich
+      - POSTGRES_DB=dawarich_production
+
+  app:
+    image: freikin/dawarich:latest
+    restart: on-failure
+    depends_on:
+      - db
+      - redis
+    volumes:
+      - ${APP_DATA_DIR}/public:/var/app/public
+      - ${APP_DATA_DIR}/watched:/var/app/tmp/imports/watched
+    environment:
+      - RAILS_ENV=production
+      - REDIS_URL=redis://redis:6379/0
+      - DATABASE_HOST=db
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=motdepassedawarich
+      - DATABASE_NAME=dawarich_production
+      - APPLICATION_HOSTS=localhost,umbrel.local
+      - SECRET_KEY_BASE=cle_secrete_rails_tres_longue_64_caracteres
+    command: ["web-entrypoint.sh", "bin/rails", "server", "-p", "3000", "-b", "0.0.0.0"]
+
+  sidekiq:
+    image: freikin/dawarich:latest
+    restart: on-failure
+    depends_on:
+      - db
+      - redis
+      - app
+    volumes:
+      - ${APP_DATA_DIR}/public:/var/app/public
+      - ${APP_DATA_DIR}/watched:/var/app/tmp/imports/watched
+    environment:
+      - RAILS_ENV=production
+      - REDIS_URL=redis://redis:6379/0
+      - DATABASE_HOST=db
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=motdepassedawarich
+      - DATABASE_NAME=dawarich_production
+      - BACKGROUND_PROCESSING_CONCURRENCY=10
+      - SECRET_KEY_BASE=cle_secrete_rails_tres_longue_64_caracteres
+    command: ["sidekiq-entrypoint.sh", "bundle", "exec", "sidekiq"]
