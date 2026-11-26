@@ -1,0 +1,18 @@
+manifestVersion: 1
+id: louka-store-airtrail
+category: files
+name: AirTrail
+version: "3.14.0"
+tagline: Suivi personnel de vos vols
+description: >-
+  Système open-source de suivi de vols avec carte interactive et statistiques.
+developer: Johan Ohly
+website: https://airtrail.johan.ohly.dk/
+dependencies: []
+repo: https://github.com/JohanOhly/AirTrail
+support: https://github.com/JohanOhly/AirTrail/issues
+port: 3000
+gallery: []
+path: ""
+defaultUsername: ""
+defaultPassword: ""
