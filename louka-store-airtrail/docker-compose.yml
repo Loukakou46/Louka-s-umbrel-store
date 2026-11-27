@@ -1,3 +1,4 @@
+
 version: "3.7"
 
 services:
@@ -6,22 +7,30 @@ services:
       APP_HOST: louka-store-airtrail_web_1
       APP_PORT: 3000
 
+  db:
+    image: postgres:16-alpine
+    restart: on-failure
+    environment:
+      POSTGRES_DB: airtrail
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${APP_SEED}
+    volumes:
+      - ${APP_DATA_DIR}/db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d airtrail"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   web:
-    image: johanohly/airtrail:latest
+    image: johly/airtrail:latest
     restart: on-failure
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     volumes:
       - ${APP_DATA_DIR}/uploads:/app/uploads
     environment:
-      - ORIGIN=http://umbrel.local:3000
-      - DB_URL=postgres://postgres:motdepassesecret@db:5432/airtrail
-
-  db:
-    image: postgres:16
-    restart: on-failure
-    volumes:
-      - ${APP_DATA_DIR}/db_data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_PASSWORD=motdepassesecret
-      - POSTGRES_DB=airtrail
+      ORIGIN: http://192.168.1.117:3000
+      DB_URL: postgres://postgres:${APP_SEED}@db:5432/airtrail
+      UPLOAD_LOCATION: /app/uploads
